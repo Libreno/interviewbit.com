@@ -67,47 +67,30 @@ public class Sudoku {
 	}
 
 	public static void solveSudoku(ArrayList<ArrayList<Character>> d) {
-		ArrayList<ArrayList<Character>> s = solve(d);
-		if (s == null){
-			return;
-		}
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				d.get(i).set(j, s.get(i).get(j));
-			}
-		}
+		solve(d);
 	}
 
-	public static ArrayList<ArrayList<Character>> solve(ArrayList<ArrayList<Character>> d) {
-		ArrayList<ArrayList<Character>> c = cloneState(d);
+	public static boolean solve(ArrayList<ArrayList<Character>> d) {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				if (c.get(i).get(j) == '.') {
-					HashSet<Character> set = getAvailableDigits(c, i, j);
+				if (d.get(i).get(j) == '.') {
+					HashSet<Character> set = getAvailableDigits(d, i, j);
 					if (set.isEmpty()) {
-						return null;
+						return false;
 					}
 					for (Character ch : set) {
-						c.get(i).set(j, ch);
-						ArrayList<ArrayList<Character>> s = solve(c);
-						if (s != null)
+						d.get(i).set(j, ch);
+						if (solve(d))
 						{
-							return s;
+							return true;
 						}
 					}
-					return null;
+					d.get(i).set(j, '.');
+					return false;
 				}
 			}
 		}
-		return d;
-	}
-
-	public static ArrayList<ArrayList<Character>> cloneState(ArrayList<ArrayList<Character>> data) {
-		ArrayList<ArrayList<Character>> clone = new ArrayList<>(data.size());
-	    for (ArrayList<Character> row : data) {
-	    	clone.add((ArrayList<Character>)row.clone());
-	    }
-	    return clone;
+		return true;
 	}
 
 	static HashSet<Character> getAvailableDigits(ArrayList<ArrayList<Character>> data, Integer rowN, Integer colN){
@@ -123,10 +106,10 @@ public class Sudoku {
 			}
 		}
 
-		Integer bucketRow = rowN / 3 + 1;
-		Integer bucketCol = colN / 3 + 1;
-		for (int i = (bucketRow - 1) * 3; i < bucketRow * 3; i++) {
-			for (int j = (bucketCol - 1) * 3; j < bucketCol * 3; j++) {
+		Integer bucketRow = rowN / 3;
+		Integer bucketCol = colN / 3;
+		for (int i = bucketRow * 3; i < (bucketRow + 1) * 3; i++) {
+			for (int j = bucketCol * 3; j < (bucketCol + 1) * 3; j++) {
 				set.add(data.get(i).get(j));
 //				System.out.println(String.format("i: %d, j: %d, char: %s", i, j, data.get(i).get(j)));
 			}
