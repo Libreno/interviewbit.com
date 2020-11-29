@@ -25,6 +25,8 @@ function print(A){
 let m = {};
 
 m.exports = { 
+    steps: 0,
+    replacements: 0,
     //param A : head node of linked list
     //return the head node in the linked list
     sortList : function(A){
@@ -52,8 +54,8 @@ m.exports = {
             let t = Ai.data;
             Ai.data = largest.data;
             largest.data = t;
+            this.replacements += 1;
             // console.log(`<${i}\t${' '}\t${' '}\t${len}\t${!Ai? 'null': Ai.data}\t${!Al? 'null' : Al.data}\t${!Ar? 'null' : Ar.data}\t${print(A)}`);
-            let l = 2 * largestN + 1;
             let r = 2 * largestN + 2;
             let Ar = this.getNth(A, len, r);
             Al = (!!Ar)? Ar.next : A;
@@ -81,6 +83,7 @@ m.exports = {
         while (!!c && k > n){
             c = c.next;
             k--;
+            this.steps += 1;
         }
         return c;
     },
@@ -109,5 +112,12 @@ m.exports = {
     }
 };
 
-const list = toList([10,1,5,0,7,9,3,4,5,7,8,9,7,4,688,4,6,756,9867,2457,76,4,65,76215,744,235,76,12,63,77,09,4,67,63,63,13,23,16,28,20,41,72,8,3,84,95,4,3,10,1,5,0,7,9,3,4,5,7,8,9,7,4,688,4,6,756,9867,2457,76,4,65,76215,744,235,76,12,63,77,09,4,67,63,63,13,23,16,28,20,41,72,8,3,84,95,4,3]);
+let a = [10,1,5,0,7,9,3,4,5,7,8,9,7,4,688,4,6,756,9867,2457,76,4,65,76215,744,235,76,12,63,77,09,4,67,63,63,13,23,16,28,20,41,72,8,3,84,95,4,3,10,1,5,0,7,9,3,4,5,7,8,9,7,4,688,4,6,756,9867,2457,76,4,65,76215,744,235,76,12,63,77,09,4,67,63,63,13,23,16,28,20,41,72,8,3,84,95,4,3]
+const list = toList(a);
+console.log('list.length ' + a.length);
+// const list = toList([10,1,5,0,7,9,3,4,5,7]);
+// const list = toList([10,1,5,0,7]);
+
 console.log(print(m.exports.sortList(list)));
+console.log('steps ' + m.exports.steps);
+console.log('replacements ' + m.exports.replacements);
