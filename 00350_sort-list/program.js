@@ -55,7 +55,9 @@ m.exports = {
             // console.log(`<${i}\t${' '}\t${' '}\t${len}\t${!Ai? 'null': Ai.data}\t${!Al? 'null' : Al.data}\t${!Ar? 'null' : Ar.data}\t${print(A)}`);
             let l = 2 * largestN + 1;
             let r = 2 * largestN + 2;
-            this.heapify(this.getNth(A, len, l), this.getNth(A, len, r), largest, A, largestN, len);
+            let Ar = this.getNth(A, len, r);
+            Al = (!!Ar)? Ar.next : A;
+            this.heapify(Al, Ar, largest, A, largestN, len);
         }
         // else {
             // console.log(`|<${i}\t${' '}\t${' '}\t${len}\t${!Ai? 'null': Ai.data}\t${!Al? 'null' : Al.data}\t${!Ar? 'null' : Ar.data}\t${print(A)}`);
@@ -84,11 +86,12 @@ m.exports = {
     },
     buildHeap(A, len){
         let i = Math.trunc(len / 2) - 1;
-        let Ai = this.getNth(A, len - 1, i);
         let l = 2 * i + 1;
         let r = 2 * i + 2;
-        let Al = this.getNth(A, len - 1, l);
         let Ar = this.getNth(A, len - 1, r);
+        let Al = null;
+        Al = (!!Ar)? Ar.next : A;
+        let Ai = this.getNth(Al, l, i);
         while(i !== -1){
             this.heapify(Al, Ar, Ai, A, i--, len);
             Ai = Ai.next;
