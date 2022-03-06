@@ -2,45 +2,65 @@ module.exports = {
     //param A : array of array of integers
     //return an integer
     findMedian : function(A){
-        const binarySearch = function (A, l, r, tryMatch) {
+        const binarySearch = function (getN, l, r, condition) {
             const m = Math.trunc((r - l)/2) + l;
             if (r - l === 1) {
-                const tm = tryMatch(A[l]);
+                const tm = condition(getN(l));
                 if (tm === 0) {
-                    return A[l];
+                    return l;
                 }
-                if (tm === 1 && tryMatch(A[r]) === 0) {
-                    return A[r];
+                if (tm === 1 && condition(getN(r)) === 0) {
+                    return r;
                 }
                 return -1;
             }
-            const t = tryMatch(A[m]);
+            const t = condition(getN(m));
             if (t === 0) {
-                return A[m];
+                return m;
             }
             if (l === r) {
                 return -1;
             }
             if (t < 0) {
-                return binarySearch(A, l, m, tryMatch);
+                return binarySearch(getN, l, m, condition);
             }
-            return binarySearch(A, m, r, tryMatch);
+            return binarySearch(getN, m, r, condition);
         };
-        return binarySearch(A, 0, 4, (n) => {
-            const a = 9;
-            const r = n === a? 0: n < a? 1: -1;
-            return r;
-        });
+        // return binarySearch((n) => A[n], 0, 4, (n) => {
+        //     const a = 9;
+        //     const r = n === a? 0: n < a? 1: -1;
+        //     return r;
+        // });
+        let amin = 0;
+        let amax = 0;
+        let count = 0;
+        for (let i = 0; i < A.length; i++) {
+            let el = A[i][0];
+            if (el < amin) {
+                amin = el;
+            }
+            el = A[i][A[0].length - 1];
+            if (el > amax) {
+                amax = el;
+            }
+        };
+        for (let j = 0; j < A.length; j++) {
+            count++;
+        }
+        console.log(amin, amax);
+        binarySearch((n) => n, amin, amax, (n) => {
+            
+        })
     }
 };
 
-console.log(module.exports.findMedian(
-    [1, 3, 5, 7, 9]));
-
 // console.log(module.exports.findMedian(
-//     [[1, 3, 5],
-//     [2, 6, 9],
-//     [3, 6, 9]]));
+//     [1, 3, 5, 7, 9]));
+
+console.log(module.exports.findMedian(
+    [[1, 3, 5],
+    [2, 6, 9],
+    [3, 6, 9]]));
 
 // 44 55 12 42 94 18 06 67
 //          --          --
